@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منتجع النخيل الدرقاوي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-expanded {
+            width: 250px;
+        }
+        
+        .content-area {
+            transition: all 0.3s ease;
+        }
+        
+        .content-expanded {
+            margin-right: 250px;
+        }
+        
+        .content-collapsed {
+            margin-right: 80px;
+        }
+        
+        .rtl-input {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+        
+        /* Animation for alerts */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .alert-animation {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 right-0 left-0 bg-white shadow-md z-50 flex items-center justify-between px-6 py-3">
+        <div class="flex items-center">
+            <button id="sidebarToggle" class="text-gray-600 hover:text-blue-600 mr-4">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-xl font-bold text-blue-600 hidden md:block">  منتجع النخيل الدرقاوي</h1>
+        </div>
+        
+        <div class="flex items-center space-x-4 space-x-reverse">
+            <div class="relative">
+                <button id="notificationBtn" class="text-gray-600 hover:text-blue-600 relative">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="notification-badge bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                </button>
+                <div id="notificationDropdown" class="hidden absolute left-0 mt-2 w-72 bg-white rounded-md shadow-lg z-50 p-2 border border-gray-200">
+                    <div class="p-2 border-b border-gray-200 font-semibold text-gray-700">الإشعارات</div>
+                    <div class="max-h-60 overflow-y-auto">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">طلب جديد من العميل أحمد</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">عقد جديد يحتاج إلى توقيع</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">دفعة مستحقة اليوم</a>
+                    </div>
+                    <div class="p-2 border-t border-gray-200 text-center">
+                        <a href="#" class="text-sm text-blue-600 hover:underline">عرض الكل</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relative">
+                <button id="userMenuBtn" class="flex items-center space-x-2 space-x-reverse">
+                    <img src="https://via.placeholder.com/40" alt="User" class="w-8 h-8 rounded-full">
+                    <span class="hidden md:inline text-gray-700">محمد أحمد</span>
+                </button>
+                <div id="userDropdown" class="hidden absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-1">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2"></i>الملف الشخصي</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-cog mr-2"></i>الإعدادات</a>
+                    <div class="border-t border-gray-200"></div>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-sign-out-alt mr-2"></i>تسجيل الخروج</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar sidebar-expanded fixed top-0 right-0 bottom-0 bg-blue-800 text-white pt-16 overflow-y-auto">
+        <div class="px-4 py-6">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <img src="https://via.placeholder.com/40" alt="User" class="w-10 h-10 rounded-full">
+                    <div class="hidden sidebar-expanded:block">
+                        <h4 class="font-semibold">محمد أحمد</h4>
+                        <p class="text-xs text-blue-200">مدير النظام</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav>
+                <div class="mb-4">
+                    <h3 class="text-xs uppercase tracking-wider text-blue-400 mb-2 hidden sidebar-expanded:block px-2">القائمة الرئيسية</h3>
+                    <ul>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg bg-blue-700 text-white">
+                                <i class="fas fa-home text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">الرئيسية</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-building text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">العقارات</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-users text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">العملاء</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-file-contract text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">العقود</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-money-bill-wave text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">المدفوعات</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-calendar-alt text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">المواعيد</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mb-4">
+                    <h3 class="text-xs uppercase tracking-wider text-blue-400 mb-2 hidden sidebar-expanded:block px-2">الإدارة</h3>
+                    <ul>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-user-shield text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">المستخدمون</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-cog text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">الإعدادات</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg hover:bg-blue-700 text-blue-100 hover:text-white">
+                                <i class="fas fa-chart-line text-lg"></i>
+                                <span class="hidden sidebar-expanded:block">التقارير</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main id="mainContent" class="content-area content-expanded pt-16 pr-4 pl-4 pb-4">
+        <div class="container mx-auto">
+            <!-- Alerts Section -->
+            <div id="alertsContainer" class="mb-6 space-y-3">
+                <!-- Alert will be added here dynamically -->
+            </div>
+            
+            <!-- Dashboard Header -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">لوحة التحكم</h2>
+                    <p class="text-gray-600">مرحباً بك مرة أخرى، محمد أحمد</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-plus"></i>
+                        <span>إضافة عقار جديد</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">إجمالي العقارات</p>
+                            <h3 class="text-2xl font-bold">124</h3>
+                        </div>
+                        <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                            <i class="fas fa-building text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-green-500 text-sm font-semibold"><i class="fas fa-arrow-up mr-1"></i> 12%</span>
+                        <span class="text-gray-500 text-sm">منذ الشهر الماضي</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">العقارات المؤجرة</p>
+                            <h3 class="text-2xl font-bold">87</h3>
+                        </div>
+                        <div class="bg-green-100 text-green-600 p-3 rounded-full">
+                            <i class="fas fa-key text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-green-500 text-sm font-semibold"><i class="fas fa-arrow-up mr-1"></i> 8%</span>
+                        <span class="text-gray-500 text-sm">منذ الشهر الماضي</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">العملاء الجدد</p>
+                            <h3 class="text-2xl font-bold">23</h3>
+                        </div>
+                        <div class="bg-purple-100 text-purple-600 p-3 rounded-full">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-red-500 text-sm font-semibold"><i class="fas fa-arrow-down mr-1"></i> 2%</span>
+                        <span class="text-gray-500 text-sm">منذ الشهر الماضي</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">إجمالي الإيرادات</p>
+                            <h3 class="text-2xl font-bold">245,000 ر.س</h3>
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
+                            <i class="fas fa-money-bill-wave text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-green-500 text-sm font-semibold"><i class="fas fa-arrow-up mr-1"></i> 15%</span>
+                        <span class="text-gray-500 text-sm">منذ الشهر الماضي</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Properties -->
+            <div class="bg-white rounded-lg shadow mb-6">
+                <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="font-semibold text-lg">أحدث العقارات المضافة</h3>
+                    <a href="#" class="text-blue-600 hover:underline text-sm">عرض الكل</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">العنوان</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">النوع</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المساحة</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">السعر</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحالة</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                        </div>
+                                        <div class="mr-4">
+                                            <div class="text-sm font-medium text-gray-900">فيلا في حي الصحافة</div>
+                                            <div class="text-sm text-gray-500">الرياض</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">فيلا</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">400 م²</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,200,000 ر.س</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">متاح</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="text-yellow-600 hover:text-yellow-900 mr-3"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                        </div>
+                                        <div class="mr-4">
+                                            <div class="text-sm font-medium text-gray-900">شقة في حي العليا</div>
+                                            <div class="text-sm text-gray-500">الرياض</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">شقة</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">180 م²</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">800,000 ر.س</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">مؤجر</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="text-yellow-600 hover:text-yellow-900 mr-3"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                        </div>
+                                        <div class="mr-4">
+                                            <div class="text-sm font-medium text-gray-900">محل تجاري في النخيل</div>
+                                            <div class="text-sm text-gray-500">الرياض</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">تجاري</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">120 م²</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1,500,000 ر.س</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">متاح</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="text-yellow-600 hover:text-yellow-900 mr-3"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Recent Payments and Calendar -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Recent Payments -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="font-semibold text-lg">أحدث المدفوعات</h3>
+                        <a href="#" class="text-blue-600 hover:underline text-sm">عرض الكل</a>
+                    </div>
+                    <div class="divide-y divide-gray-200">
+                        <div class="p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="bg-green-100 text-green-600 p-3 rounded-full">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">إيجار شقة العليا</h4>
+                                    <p class="text-sm text-gray-500">العميل: أحمد محمد</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <h4 class="font-medium text-green-600">5,000 ر.س</h4>
+                                <p class="text-sm text-gray-500">اليوم، 10:45 ص</p>
+                            </div>
+                        </div>
+                        <div class="p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">عربون فيلا الصحافة</h4>
+                                    <p class="text-sm text-gray-500">العميل: سعيد خالد</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <h4 class="font-medium text-blue-600">20,000 ر.س</h4>
+                                <p class="text-sm text-gray-500">بالأمس، 3:30 م</p>
+                            </div>
+                        </div>
+                        <div class="p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">صيانة عامة</h4>
+                                    <p class="text-sm text-gray-500">فيلا الشرقية</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <h4 class="font-medium text-yellow-600">2,500 ر.س</h4>
+                                <p class="text-sm text-gray-500">بالأمس، 11:20 ص</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Calendar -->
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4 border-b border-gray-200">
+                        <h3 class="font-semibold text-lg">المواعيد</h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-medium">اليوم، 15 ربيع الأول 1445</h4>
+                                <div class="flex space-x-2 space-x-reverse">
+                                    <button class="p-1 rounded-full hover:bg-gray-100">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <button class="p-1 rounded-full hover:bg-gray-100">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-7 gap-1 text-center text-sm font-medium text-gray-500">
+                                <div class="py-2">أ</div>
+                                <div class="py-2">إ</div>
+                                <div class="py-2">ث</div>
+                                <div class="py-2">أ</div>
+                                <div class="py-2">خ</div>
+                                <div class="py-2">ج</div>
+                                <div class="py-2">س</div>
+                            </div>
+                            <div class="grid grid-cols-7 gap-1 text-center">
+                                <div class="py-2 text-gray-400">25</div>
+                                <div class="py-2 text-gray-400">26</div>
+                                <div class="py-2 text-gray-400">27</div>
+                                <div class="py-2 text-gray-400">28</div>
+                                <div class="py-2 text-gray-400">29</div>
+                                <div class="py-2 text-gray-400">30</div>
+                                <div class="py-2">1</div>
+                                <div class="py-2">2</div>
+                                <div class="py-2">3</div>
+                                <div class="py-2">4</div>
+                                <div class="py-2">5</div>
+                                <div class="py-2">6</div>
+                                <div class="py-2">7</div>
+                                <div class="py-2">8</div>
+                                <div class="py-2">9</div>
+                                <div class="py-2">10</div>
+                                <div class="py-2">11</div>
+                                <div class="py-2">12</div>
+                                <div class="py-2">13</div>
+                                <div class="py-2">14</div>
+                                <div class="py-2 bg-blue-100 text-blue-600 rounded-full font-medium">15</div>
+                                <div class="py-2">16</div>
+                                <div class="py-2">17</div>
+                                <div class="py-2">18</div>
+                                <div class="py-2">19</div>
+                                <div class="py-2">20</div>
+                                <div class="py-2">21</div>
+                                <div class="py-2">22</div>
+                                <div class="py-2">23</div>
+                                <div class="py-2">24</div>
+                                <div class="py-2">25</div>
+                                <div class="py-2">26</div>
+                                <div class="py-2">27</div>
+                                <div class="py-2">28</div>
+                                <div class="py-2">29</div>
+                                <div class="py-2">30</div>
+                                <div class="py-2 text-gray-400">1</div>
+                                <div class="py-2 text-gray-400">2</div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-medium">موعد مع عميل</h4>
+                                        <p class="text-sm text-gray-600">عرض فيلا الصحافة</p>
+                                    </div>
+                                    <span class="text-sm text-gray-500">4:00 - 5:00 م</span>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-red-50 rounded-lg border-l-4 border-red-500">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-medium">توقيع عقد</h4>
+                                        <p class="text-sm text-gray-600">عقد إيجار شقة العليا</p>
+                                    </div>
+                                    <span class="text-sm text-gray-500">6:00 - 6:30 م</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">تسجيل الدخول</h3>
+                    <button id="closeLoginModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">اسم المستخدم</label>
+                        <input type="text" id="username" class="rtl-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+                        <input type="password" id="password" class="rtl-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <input id="remember" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="remember" class="mr-2 block text-sm text-gray-700">تذكرني</label>
+                        </div>
+                        <a href="#" class="text-sm text-blue-600 hover:underline">نسيت كلمة المرور؟</a>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        تسجيل الدخول
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle Sidebar
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mainContent = document.getElementById('mainContent');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-expanded');
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('content-expanded');
+            mainContent.classList.toggle('content-collapsed');
+        });
+        
+        // Toggle Dropdowns
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userDropdown = document.getElementById('userDropdown');
+        
+        notificationBtn.addEventListener('click', () => {
+            notificationDropdown.classList.toggle('hidden');
+            userDropdown.classList.add('hidden');
+        });
+        
+        userMenuBtn.addEventListener('click', () => {
+            userDropdown.classList.toggle('hidden');
+            notificationDropdown.classList.add('hidden');
+        });
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+            
+            if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Login Modal
+        const loginModal = document.getElementById('loginModal');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        
+        // For demo purposes, show login modal after 1 second
+        setTimeout(() => {
+            loginModal.classList.remove('hidden');
+        }, 1000);
+        
+        closeLoginModal.addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+        });
+        
+        // Login Form Submission
+        const loginForm = document.getElementById('loginForm');
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation
+            if (username === 'admin' && password === 'admin') {
+                // Hide login modal
+                loginModal.classList.add('hidden');
+                
+                // Show success alert
+                showAlert('تم تسجيل الدخول بنجاح', 'success');
+            } else {
+                showAlert('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+            }
+        });
+        
+        // Show Alert Function
+        function showAlert(message, type) {
+            const alertsContainer = document.getElementById('alertsContainer');
+            
+            const alert = document.createElement('div');
+            alert.className = `alert-animation p-4 rounded-lg border ${type === 'success' ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'}`;
+            alert.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button class="text-gray-500 hover:text-gray-700" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            alertsContainer.prepend(alert);
+            
+            // Remove alert after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+        
+        // Demo alerts
+        setTimeout(() => {
+            showAlert('هناك 3 عقود تحتاج إلى مراجعة', 'warning');
+        }, 1500);
+        
+        setTimeout(() => {
+            showAlert('تم إضافة عقار جديد بنجاح', 'success');
+        }, 3000);
+    </script>
+</body>
+</html>
